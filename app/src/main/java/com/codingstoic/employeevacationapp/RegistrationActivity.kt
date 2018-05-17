@@ -30,14 +30,14 @@ class RegistrationActivity : AppCompatActivity(), RegistrationView {
                 activity_registration_repeat_password_input_edit_text.text.toString())
     }
 
-    private fun hideFormShowProgress() {
-        changeVisibilityForView(view = activity_registration_content_group, visibility = View.INVISIBLE)
+    override fun hideFormShowProgress() {
+        changeVisibilityForView(view = activity_registration_content_group, visibility = View.GONE)
         changeVisibilityForView(view = activity_registration_progress_bar, visibility = View.VISIBLE)
     }
 
-    override fun showRegistrationFormHideProgress() {
+    override fun showFormHideProgress() {
         changeVisibilityForView(view = activity_registration_content_group, visibility = View.VISIBLE)
-        changeVisibilityForView(view = activity_registration_progress_bar, visibility = View.INVISIBLE)
+        changeVisibilityForView(view = activity_registration_progress_bar, visibility = View.GONE)
     }
 
     private fun changeVisibilityForView(view: View, visibility: Int) {
@@ -45,11 +45,11 @@ class RegistrationActivity : AppCompatActivity(), RegistrationView {
     }
 
     override fun showErrorForPasssordFeild(error: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        activity_registration_password_input_layout.error = error
     }
 
     override fun showErrorForRepeatPasssordFeild(error: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        activity_registration_repeat_password_input_layout.error = error
     }
 
     override fun showErrorForEmailField(error: String) {
@@ -67,7 +67,8 @@ interface RegistrationView {
     fun showErrorForRepeatPasssordFeild(error: String)
     fun showErrorForEmailField(error: String)
     fun navigateToHomeScreen()
-    fun showRegistrationFormHideProgress()
+    fun showFormHideProgress()
+    fun hideFormShowProgress()
 }
 
 interface RegistrationPresenter<T : RegistrationView> {
@@ -83,14 +84,35 @@ class RegistrationViewPresenter : RegistrationPresenter<RegistrationView> {
     }
 
     override fun registerUser(email: String, password: String, repeatPassword: String) {
-        launch(UI) {
-            delay(3, TimeUnit.SECONDS)
-            if (android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        if (email.isEmpty()) {
+            view.showErrorForEmailField("Email field empty!")
+        }
 
-            } else {
-                view.showRegistrationFormHideProgress()
-                view.showErrorForEmailField("Email not valid")
+        if (password.isEmpty()) {
+            view.showErrorForEmailField("Password field empty!")
+        }
+
+        if (repeatPassword.isEmpty()) {
+            view.showErrorForEmailField("Password field empty!")
+        }
+
+        if (password.length < 3) {
+            view.showErrorForPasssordFeild("Password too short!")
+        }
+
+        if (repeatPassword != password) {
+            view.showErrorForRepeatPasssordFeild("Passwords do not match!")
+        }
+
+        if (android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+            && password.length >= 3 && repeatPassword == password) {
+            view.hideFormShowProgress()
+            launch(UI) {
+                delay(3, TimeUnit.SECONDS)
+                view.navigateToHomeScreen()
             }
+        } else {
+            view.showFormHideProgress()
         }
     }
 }
