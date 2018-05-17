@@ -56,7 +56,7 @@ class RegistrationActivity : AppCompatActivity(), RegistrationView {
         activity_registration_email_input_layout.error = error
     }
 
-    override fun navigateToHomeScreen() {
+    override fun navigateToLoginScreen() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
@@ -66,7 +66,7 @@ interface RegistrationView {
     fun showErrorForPasssordFeild(error: String)
     fun showErrorForRepeatPasssordFeild(error: String)
     fun showErrorForEmailField(error: String)
-    fun navigateToHomeScreen()
+    fun navigateToLoginScreen()
     fun showFormHideProgress()
     fun hideFormShowProgress()
 }
@@ -109,7 +109,7 @@ class RegistrationViewPresenter : RegistrationPresenter<RegistrationView> {
             view.hideFormShowProgress()
             launch(UI) {
                 delay(3, TimeUnit.SECONDS)
-                view.navigateToHomeScreen()
+                view.navigateToLoginScreen()
             }
         } else {
             view.showFormHideProgress()
