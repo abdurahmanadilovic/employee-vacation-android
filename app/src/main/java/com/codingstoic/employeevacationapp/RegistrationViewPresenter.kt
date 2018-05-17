@@ -1,16 +1,15 @@
 package com.codingstoic.employeevacationapp
 
+import android.util.Patterns
 import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
-import java.util.concurrent.TimeUnit
 
 interface RegistrationPresenter<T : RegistrationView> {
     fun attachView(view: T)
     fun registerUser(email: String, password: String, repeatPassword: String)
 }
 
-class RegistrationViewPresenter : RegistrationPresenter<RegistrationView> {
+class RegistrationViewPresenter(val userRepository: UserRepository) : RegistrationPresenter<RegistrationView> {
     lateinit var view: RegistrationView
 
     override fun attachView(view: RegistrationView) {
@@ -38,15 +37,23 @@ class RegistrationViewPresenter : RegistrationPresenter<RegistrationView> {
             view.showErrorForRepeatPasswordField("Passwords do not match!")
         }
 
-        if (android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
-            && password.length >= 3 && repeatPassword == password) {
-            view.hideFormShowProgress()
-            launch(UI) {
-                delay(3, TimeUnit.SECONDS)
-                view.navigateToLoginScreen()
+        when (emailAndPasswordIsValid(email, password, repeatPassword)) {
+            true -> {
+                view.hideFormShowProgress()
+
+                launch(UI) {
+                    val response = userRepository.createUser(email, password)
+                    when (response.status) {
+                        ResponseStatus.SUCCESS -> view.navigateToLoginScreen()
+                        ResponseStatus.FAILURE -> view.showServerError(response.error)
+                    }
+                }
             }
-        } else {
-            view.showFormHideProgress()
+            false -> view.showFormHideProgress()
         }
     }
+
+    private fun emailAndPasswordIsValid(email: String, password: String, repeatPassword: String) =
+            (Patterns.EMAIL_ADDRESS.matcher(email).matches()
+             && password.length >= 3 && repeatPassword == password)
 }

@@ -7,8 +7,8 @@ import butterknife.ButterKnife
 import kotlinx.android.synthetic.main.activity_registration.*
 
 class RegistrationActivity : AppCompatActivity(), RegistrationView {
-
-    private val presenter: RegistrationPresenter<RegistrationView> = RegistrationViewPresenter()
+    private val presenter: RegistrationPresenter<RegistrationView> =
+            RegistrationViewPresenter(userRepository = UserRepository())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +53,11 @@ class RegistrationActivity : AppCompatActivity(), RegistrationView {
     }
 
     override fun navigateToLoginScreen() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+    }
+
+    override fun showServerError(error: String) {
+
     }
 
 }
@@ -65,5 +69,6 @@ interface RegistrationView {
     fun navigateToLoginScreen()
     fun showFormHideProgress()
     fun hideFormShowProgress()
+    fun showServerError(error: String)
 }
 
