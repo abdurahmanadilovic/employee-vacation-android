@@ -71,8 +71,33 @@
         android:layout_marginEnd="@dimen/default_left_right_margin"
         android:clickable="true"
         android:focusable="true"
+        android:onClick="createUserButtonClicked"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_person_add_white_24dp" />
+
+    <android.support.constraint.Group
+        android:id="@+id/activity_registration_content_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="activity_registration_create_user_button,
+        activity_registration_repeat_password_input_layout,
+        activity_registration_password_input_layout,
+        activity_registration_email_input_layout" />
+
+    <ProgressBar
+        android:id="@+id/activity_registration_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
