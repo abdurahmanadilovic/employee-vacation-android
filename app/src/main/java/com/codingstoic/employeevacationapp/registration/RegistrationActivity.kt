@@ -1,9 +1,11 @@
-package com.codingstoic.employeevacationapp
+package com.codingstoic.employeevacationapp.registration
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import butterknife.ButterKnife
+import com.codingstoic.employeevacationapp.R
+import com.codingstoic.employeevacationapp.user.UserRepository
 import kotlinx.android.synthetic.main.activity_registration.*
 
 class RegistrationActivity : AppCompatActivity(), RegistrationView {

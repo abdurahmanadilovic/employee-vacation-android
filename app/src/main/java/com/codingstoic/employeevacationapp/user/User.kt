@@ -1,4 +1,4 @@
-package com.codingstoic.employeevacationapp
+package com.codingstoic.employeevacationapp.user
 
 /**
  * Created by Abdurahman Adilovic on 5/17/18.

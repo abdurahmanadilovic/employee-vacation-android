@@ -1,6 +1,8 @@
-package com.codingstoic.employeevacationapp
+package com.codingstoic.employeevacationapp.registration
 
 import android.util.Patterns
+import com.codingstoic.employeevacationapp.user.ResponseStatus
+import com.codingstoic.employeevacationapp.user.UserRepository
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 
