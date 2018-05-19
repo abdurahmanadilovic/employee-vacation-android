@@ -8,6 +8,10 @@ class UserRepository {
     suspend fun createUser(email: String, password: String): Response<User> {
         return Response(User(1), ResponseStatus.SUCCESS, "")
     }
+
+    suspend fun loginUser(email: String, password: String): Response<User> {
+        return Response(User(1), ResponseStatus.SUCCESS, "")
+    }
 }
 
 enum class ResponseStatus {

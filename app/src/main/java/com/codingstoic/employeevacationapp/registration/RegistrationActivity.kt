@@ -67,7 +67,7 @@ class RegistrationActivity : AppCompatActivity(), RegistrationView {
     }
 
     override fun showServerError(error: String) {
-
+        // todo implement snack bar
     }
 
 }

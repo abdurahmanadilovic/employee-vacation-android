@@ -39,19 +39,21 @@ class RegistrationViewPresenter(val userRepository: UserRepository) : Registrati
             view.showErrorForRepeatPasswordField("Passwords do not match!")
         }
 
-        when (emailAndPasswordIsValid(email, password, repeatPassword)) {
-            true -> {
-                view.hideFormShowProgress()
+        if (Patterns.EMAIL_ADDRESS.matcher(email).matches().not()) {
+            view.showErrorForEmailField("Email not valid!")
+        }
 
-                launch(UI) {
-                    val response = userRepository.createUser(email, password)
-                    when (response.status) {
-                        ResponseStatus.SUCCESS -> view.navigateToLoginScreen()
-                        ResponseStatus.FAILURE -> view.showServerError(response.error)
-                    }
+        if (emailAndPasswordIsValid(email, password, repeatPassword)) {
+            view.hideFormShowProgress()
+
+            launch(UI) {
+                val response = userRepository.createUser(email, password)
+                view.showFormHideProgress()
+                when (response.status) {
+                    ResponseStatus.SUCCESS -> view.navigateToLoginScreen()
+                    ResponseStatus.FAILURE -> view.showServerError(response.error)
                 }
             }
-            false -> view.showFormHideProgress()
         }
     }
 
