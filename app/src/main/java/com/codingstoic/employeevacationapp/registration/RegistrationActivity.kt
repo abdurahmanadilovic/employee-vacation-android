@@ -8,6 +8,16 @@ import com.codingstoic.employeevacationapp.R
 import com.codingstoic.employeevacationapp.user.UserRepository
 import kotlinx.android.synthetic.main.activity_registration.*
 
+interface RegistrationView {
+    fun showErrorForPasswordField(error: String)
+    fun showErrorForRepeatPasswordField(error: String)
+    fun showErrorForEmailField(error: String)
+    fun showServerError(error: String)
+    fun showFormHideProgress()
+    fun hideFormShowProgress()
+    fun navigateToLoginScreen()
+}
+
 class RegistrationActivity : AppCompatActivity(), RegistrationView {
     private val presenter: RegistrationPresenter<RegistrationView> =
             RegistrationViewPresenter(userRepository = UserRepository())
@@ -20,8 +30,6 @@ class RegistrationActivity : AppCompatActivity(), RegistrationView {
     }
 
     fun createUserButtonClicked(view: View) {
-        hideFormShowProgress()
-
         presenter.registerUser(
                 activity_registration_email_input_edit_text.text.toString(),
                 activity_registration_password_input_edit_text.text.toString(),
@@ -62,15 +70,5 @@ class RegistrationActivity : AppCompatActivity(), RegistrationView {
 
     }
 
-}
-
-interface RegistrationView {
-    fun showErrorForPasswordField(error: String)
-    fun showErrorForRepeatPasswordField(error: String)
-    fun showErrorForEmailField(error: String)
-    fun navigateToLoginScreen()
-    fun showFormHideProgress()
-    fun hideFormShowProgress()
-    fun showServerError(error: String)
 }
 
