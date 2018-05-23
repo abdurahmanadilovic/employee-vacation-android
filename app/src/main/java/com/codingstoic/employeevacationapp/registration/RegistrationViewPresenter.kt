@@ -6,13 +6,14 @@ import com.codingstoic.employeevacationapp.user.UserRepository
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 
-interface RegistrationPresenter<T : RegistrationView> {
-    fun attachView(view: T)
+interface RegistrationPresenter {
+    fun attachView(view: RegistrationView)
+    fun removeView()
     fun registerUser(email: String, password: String, repeatPassword: String)
 }
 
-class RegistrationViewPresenter(val userRepository: UserRepository) : RegistrationPresenter<RegistrationView> {
-    lateinit var view: RegistrationView
+class RegistrationViewPresenter(val userRepository: UserRepository) : RegistrationPresenter {
+    var view: RegistrationView? = null
 
     override fun attachView(view: RegistrationView) {
         this.view = view
@@ -20,42 +21,47 @@ class RegistrationViewPresenter(val userRepository: UserRepository) : Registrati
 
     override fun registerUser(email: String, password: String, repeatPassword: String) {
         if (email.isEmpty()) {
-            view.showErrorForEmailField("Email field empty!")
+            view?.showErrorForEmailField("Email field empty!")
         }
 
         if (password.isEmpty()) {
-            view.showErrorForEmailField("Password field empty!")
+            view?.showErrorForEmailField("Password field empty!")
         }
 
         if (repeatPassword.isEmpty()) {
-            view.showErrorForEmailField("Password field empty!")
+            view?.showErrorForEmailField("Password field empty!")
         }
 
         if (password.length < 3) {
-            view.showErrorForPasswordField("Password too short!")
+            view?.showErrorForPasswordField("Password too short!")
         }
 
         if (repeatPassword != password) {
-            view.showErrorForRepeatPasswordField("Passwords do not match!")
+            view?.showErrorForRepeatPasswordField("Passwords do not match!")
         }
 
         if (Patterns.EMAIL_ADDRESS.matcher(email).matches().not()) {
-            view.showErrorForEmailField("Email not valid!")
+            view?.showErrorForEmailField("Email not valid!")
         }
 
         if (emailAndPasswordIsValid(email, password, repeatPassword)) {
-            view.hideFormShowProgress()
+            view?.hideFormShowProgress()
 
             launch(UI) {
                 val response = userRepository.createUser(email, password)
-                view.showFormHideProgress()
+                view?.showFormHideProgress()
                 when (response.status) {
-                    ResponseStatus.SUCCESS -> view.navigateToLoginScreen()
-                    ResponseStatus.FAILURE -> view.showServerError(response.error)
+                    ResponseStatus.SUCCESS -> view?.navigateToLoginScreen()
+                    ResponseStatus.FAILURE -> view?.showServerError(response.error)
                 }
             }
         }
     }
+
+    override fun removeView() {
+        view = null
+    }
+
 
     private fun emailAndPasswordIsValid(email: String, password: String, repeatPassword: String) =
             (Patterns.EMAIL_ADDRESS.matcher(email).matches()

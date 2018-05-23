@@ -19,7 +19,7 @@ interface RegistrationView {
 }
 
 class RegistrationActivity : AppCompatActivity(), RegistrationView {
-    private val presenter: RegistrationPresenter<RegistrationView> =
+    private val presenter: RegistrationPresenter =
             RegistrationViewPresenter(userRepository = UserRepository())
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,6 +27,11 @@ class RegistrationActivity : AppCompatActivity(), RegistrationView {
         setContentView(R.layout.activity_registration)
         presenter.attachView(this)
         ButterKnife.bind(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.removeView()
     }
 
     fun createUserButtonClicked(view: View) {
