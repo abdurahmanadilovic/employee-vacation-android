@@ -17,6 +17,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".login.LoginActivity" />
+        <activity
+            android:name=".user.UserVacationsActivity"
+            android:label="@string/title_activity_user_vacations"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
