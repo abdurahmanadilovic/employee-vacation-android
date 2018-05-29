@@ -31,7 +31,7 @@ class RegistrationActivity : AppCompatActivity(), RegistrationView {
 
     override fun onDestroy() {
         super.onDestroy()
-        presenter.removeView()
+        presenter.detachView()
     }
 
     fun createUserButtonClicked(view: View) {
